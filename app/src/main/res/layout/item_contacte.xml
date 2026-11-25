@@ -41,7 +41,7 @@
         android:id="@+id/chkFavorit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Favorit">
+        android:text="@string/favorit">
     </CheckBox>
 
 </LinearLayout>

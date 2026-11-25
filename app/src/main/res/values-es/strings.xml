@@ -39,5 +39,6 @@
 
     <!-- Alarma -->
     <string name="alarma_missatge">Llamar con %1$s</string>
+    <string name="favorit">Favorito</string>
 
 </resources>

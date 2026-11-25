@@ -42,5 +42,6 @@
 
     <!-- Alarma -->
     <string name="alarma_missatge">Crida amb %1$s</string>
+    <string name="favorit">Favorit</string>
 
 </resources>
