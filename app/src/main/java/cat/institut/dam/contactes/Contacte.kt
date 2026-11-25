@@ -22,7 +22,7 @@ data class Contacte(
         inicialsSplit[0][0].toString();
     }
     val adrecaCompleta : String = "$carrer $ciutat $codiPostal";
-    val urlAvatar : String = "https://i.pravatar.cc/300?u=$username"
+    var urlAvatar : String = "https://i.pravatar.cc/300?u=$username"
 
     companion object {
         fun desDeJson(json: JSONObject): Contacte {
