@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/arrel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:padding="16dp"
+    >
+    
+    <TextView
+        android:id="@+id/tvInicials"
+        style="@style/TextMonograma">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvCiutat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvCorreu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp">
+    </TextView>
+
+    <CheckBox
+        android:id="@+id/chkFavorit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favorit">
+    </CheckBox>
+
+</LinearLayout>
