@@ -1,16 +1,22 @@
 package cat.institut.dam.contactes
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -33,6 +39,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var txtBuit: TextView
     private lateinit var txtAvis: TextView
     private lateinit var rvContactes: RecyclerView
+    private lateinit var adapter: ContacteAdapter
+
+    private val filPrincipal = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +60,26 @@ class MainActivity : AppCompatActivity() {
         //
         //         rvContactes.layoutManager = LinearLayoutManager(this)
         //         rvContactes.adapter = adapter
+        adapter = ContacteAdapter(
+            onContacteClick = { contacte ->
+                Toast.makeText(this, contacte.nom, Toast.LENGTH_SHORT).show()
+            },
+            onFavoriteClick = { contacte ->
+                ContactesRepository.alternaFavorit(contacte.id)
+            }
+        )
+        rvContactes.layoutManager = LinearLayoutManager(this)
+        rvContactes.adapter = adapter
 
         // TODO 2: el cercador ha de filtrar la llista a cada tecla.
         //
         //         etCerca.doAfterTextChanged { text -> ... }
+
+        etCerca.doAfterTextChanged { text ->
+            val filtrats = ContactesRepository.cerca(text?.toString().orEmpty())
+            adapter.actualitza(filtrats)
+            txtBuit.visibility = if (filtrats.isEmpty()) View.VISIBLE else View.GONE
+        }
 
         // TODO 3: el botó ha de tornar a carregar els contactes.
         //
@@ -78,8 +103,31 @@ class MainActivity : AppCompatActivity() {
      * Quan la llista s'hagi carregat correctament, crida
      * `demanaPermisNotificacions()` abans de mostrar la notificació.
      */
+
     private fun carrega() {
         // TODO: implementa la càrrega de dades
+        pbCarga.visibility = View.VISIBLE
+        txtAvis.visibility = View.GONE
+
+        Thread {
+            var esLocal = false
+            var dades = try {
+                ContactesService.desDeXarxa()
+            } catch (e: Exception){
+                esLocal = true
+                ContactesService.desDeRecurs(this)
+            }
+
+            filPrincipal.post {
+                pbCarga.visibility = View.GONE
+                txtAvis.visibility = if (esLocal) View.VISIBLE else View.GONE
+
+                ContactesRepository.actualitza(dades)
+                val filtrats = ContactesRepository.cerca(etCerca.text?.toString().orEmpty())
+                adapter.actualitza(filtrats)
+                txtBuit.visibility = if (filtrats.isEmpty()) View.VISIBLE else View.GONE
+            }
+        }.start()
     }
 
     /**

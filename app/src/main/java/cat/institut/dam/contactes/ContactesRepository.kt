@@ -30,8 +30,13 @@ object ContactesRepository {
         }
     }
 
-    fun cerca(){
-
+    fun cerca(text: String): List<Contacte>{
+        if (text.isBlank()) return contactes
+        return contactes.filter { contactes ->
+            contactes.nom.contains(text, ignoreCase = true) ||
+            contactes.ciutat.contains(text, ignoreCase = true) ||
+            contactes.email.contains(text, ignoreCase = true)
+        }
     }
 
     fun desaFoto(id: Int, uri: String){
